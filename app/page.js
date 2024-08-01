@@ -8,9 +8,7 @@ export default function Page() {
                 <h1 className="text-4xl font-bold">Recipe Finder</h1>
                 <h2 className="text-2xl">Discover delicious recipes</h2>
             </header>
-            {/* <SingleRecipe /> */}
             <Image />
         </main>
     );
 }
-
