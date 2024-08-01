@@ -6,23 +6,23 @@ import Recipe from "./recipe";
 export default function SingleRecipe() {
     const [singleRecipe, setSingleRecipe] = useState(null);
 
-    async function getRecipeById() {
+    async function fetchSingleRecipe() {
         try {
-            const response = await fetch("https://api.api-ninjas.com/v1/recipe");
+            const response = await fetch(`https://api.api-ninjas.com/v1/recipe?id=12345&api_key=YOUR_API_KEY`);
             const data = await response.json();
-            setSingleRecipe(data);
+            setSingleRecipe(data[0]);
         } catch (error) {
-            console.log(`Error: ${error.message}`);
+            console.error(`Error fetching recipe: ${error.message}`);
         }
     }
 
-    useEffect(() => { getRecipeById(); }, []);
+    useEffect(() => {
+        fetchSingleRecipe();
+    }, []);
 
     return (
-        <div>
-            {singleRecipe && (
-                <Recipe recipeObj={singleRecipe} />
-            )}
+        <div className="single-recipe-container">
+            {singleRecipe && <Recipe recipe={singleRecipe} />}
         </div>
     );
 }

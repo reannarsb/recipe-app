@@ -1,19 +1,17 @@
-export default function Recipe({ recipeObj }) {
+export default function Recipe({ recipe }) {
     const {
         title,
         ingredients,
         instructions,
         servings
-    } = recipeObj;
-  
+    } = recipe;
+
     return (
-        <div className="mx-20 my-10 p-5 bg-green-400 rounded">
-            <h3 className="text-lg">{title}</h3>
-            <ul>
-                <li><b>Servings:</b> {servings}</li>
-                <li><b>Ingredients:</b> {ingredients.join(", ")}</li>
-                <li><b>Instructions:</b> {instructions}</li>
-            </ul>
+        <div className="recipe-card p-4 m-4 bg-yellow-200 rounded shadow-lg">
+            <h3 className="text-2xl font-bold">{title}</h3>
+            <p className="my-2"><strong>Servings:</strong> {servings}</p>
+            <p className="my-2"><strong>Ingredients:</strong> {ingredients.join(", ")}</p>
+            <p className="my-2"><strong>Instructions:</strong> {instructions}</p>
         </div>
     );
-  }
+}

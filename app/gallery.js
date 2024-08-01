@@ -2,58 +2,43 @@
 import { useEffect, useState } from "react";
 import Recipe from "./recipe";
 
-export default function Gallery() {
+export default function Image() {
+    const [recipes, setRecipes] = useState([]);
+    const [query, setQuery] = useState("chicken");
 
-    const [recipeIds, setRecipeIds] = useState([]);
-    const [galleryDisplay, setGalleryDisplay] = useState([]);
-
-    async function getRecipeIds() {
+    async function fetchRecipes() {
         try {
             const response = await fetch(
-                "your-api"
+                `https://api.api-ninjas.com/v1/recipe?query=${query}&api_key=YOUR_API_KEY`
             );
             const data = await response.json();
-            const shuffled = data.sort(() => 0.5 - Math.random()).slice(0, 10);
-            setRecipeIds(shuffled);
+            setRecipes(data);
         } catch (error) {
-            console.log(`Error ${error.message}`);
-        }
-    }
-
-    async function getRecipeById(recipe) {
-        try {
-            const response = await fetch(
-                `your-api`
-            );
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.log(`Error: ${error.message}`);
+            console.error(`Error fetching recipes: ${error.message}`);
         }
     }
 
     useEffect(() => {
-        getRecipeIds();
-    }, []);
-
-    useEffect(() => {
-        (async () => {
-            if (recipeIds.length > 0) {
-                let thisGallery = [];
-                for (let i = 0; i < recipeIds.length; i++) {
-                    let thisRecipe = await getRecipeById(recipeIds[i]);
-                    thisGallery.push(thisRecipe);
-                }
-                setGalleryDisplay(thisGallery);
-            }
-        })();
-    }, [recipeIds]);
+        fetchRecipes();
+    }, [query]);
 
     return (
-        <div>
-            {galleryDisplay.map((recipe) => (
-                <Recipe key={recipe.id} recipeObj={recipe} />
-            ))}
+        <div className="image-container">
+            <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for recipes..."
+                className="search-input p-2 border rounded"
+            />
+            <button onClick={fetchRecipes} className="search-button p-2 bg-blue-500 text-white rounded ml-2">
+                Search
+            </button>
+            <div className="recipes-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {recipes.map((recipe, index) => (
+                    <Recipe key={index} recipe={recipe} />
+                ))}
+            </div>
         </div>
     );
 }
